@@ -5,4 +5,9 @@
   padding-inline: $spacing-lg;
   padding-block: $spacing-md;
   border-radius: $radius-md;
+  border: 1px solid transparent;
+
+  &:hover {
+    background-color: $tertiary;
+  }
 }

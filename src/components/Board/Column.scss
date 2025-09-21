@@ -3,4 +3,16 @@
 .column {
   padding-inline: $spacing-md;
   min-width: 250px;
+
+  &__title {
+    font-size: $font-size-sm;
+    font-weight: 800;
+    padding-bottom: $spacing-md;
+    color: $off-white;
+    opacity: 0.6;
+  }
+
+  &__cards > * + * {
+    margin-block: 1rem;
+  }
 }

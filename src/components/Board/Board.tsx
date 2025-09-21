@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./Board.scss";
 import Column from "./Column";
 import { DndContext, type DragEndEvent } from "@dnd-kit/core";
+import Button from "../Button/Button";
 
 interface Task {
   id: string;
@@ -20,6 +21,8 @@ export default function Board() {
     { id: "1", title: "Task 1", columnId: "todo" },
     { id: "2", title: "Task 2", columnId: "in-progress" },
     { id: "3", title: "Task 3", columnId: "done" },
+    { id: "4", title: "Task 4", columnId: "todo" },
+    { id: "5", title: "Task 5", columnId: "todo" },
   ]);
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -39,17 +42,20 @@ export default function Board() {
 
   return (
     <div className="board">
-      <div className="board__title">
-        <p className="board__title--text">Welcome to the board</p>
+      <div className="board__top">
+        <div className="board__title">
+          <p className="board__title--text">Welcome to the board</p>
+        </div>
+        <Button text="+ Add New Task" variant="primary" />
       </div>
       <DndContext onDragEnd={handleDragEnd}>
-      <div className="columns-container">
+        <div className="columns-container">
           {columns.map((col) => (
-            <Column 
-              key={col.id} 
+            <Column
+              key={col.id}
               id={col.id}
-              title={col.title} 
-              tasks={tasks.filter(task => task.columnId === col.id)}
+              title={col.title}
+              tasks={tasks.filter((task) => task.columnId === col.id)}
             />
           ))}
         </div>

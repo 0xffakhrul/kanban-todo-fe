@@ -8,10 +8,16 @@
   height: 100%;
   border-left: 1px solid $primary;
 
+  .board__top {
+    background-color: $secondary;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   .board__title {
     padding-inline: $spacing-lg;
     padding-block: $spacing-md;
-    background-color: $secondary;
   }
 
   .board__title--text {

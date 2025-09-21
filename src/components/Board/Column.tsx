@@ -21,10 +21,14 @@ export default function Column({ id, title, tasks }: ColumnProps) {
 
   return (
     <div className="column" ref={setNodeRef}>
-      <p>{title}</p>
-      {tasks.map((task) => (
-        <TaskCard key={task.id} task={task} />
-      ))}
+      <p className="column__title">
+        {title}({tasks.length})
+      </p>
+      <div className="column__cards">
+        {tasks.map((task) => (
+          <TaskCard key={task.id} task={task} />
+        ))}
+      </div>
     </div>
   );
 }

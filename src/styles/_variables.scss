@@ -1,10 +1,12 @@
-$primary: #282A36;
-$secondary: #44475A;
-$red: #FF5555;
+$primary: oklch(28.822% 0.022 277.508);
+$secondary: oklch(26.805% 0.02 277.508);
+$tertiary: oklch(24.787% 0.019 277.508);
+$neutral: oklch(39.445% 0.032 275.524);
 $green: #50FA7B;
 $purple: #BD93F9;
 $orange: #FFB86C;
 $off-white: #F8F8F2;
+$red: #FF5555;
 
 $spacing-xs: 0.25rem;
 $spacing-sm: 0.5rem;

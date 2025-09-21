@@ -1,0 +1,8 @@
+@use "../../styles/variables" as *;
+
+.card {
+  background-color: $secondary;
+  padding-inline: $spacing-lg;
+  padding-block: $spacing-md;
+  border-radius: $radius-md;
+}

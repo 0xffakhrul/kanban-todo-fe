@@ -1,0 +1,28 @@
+@use "../../styles/variables" as *;
+
+.board {
+  display: flex;
+  flex-direction: column;
+  background-color: $primary;
+  color: $off-white;
+  height: 100%;
+  border-left: 1px solid $primary;
+
+  .board__title {
+    padding-inline: $spacing-lg;
+    padding-block: $spacing-md;
+    background-color: $secondary;
+  }
+
+  .board__title--text {
+    font-size: $font-size-2xl;
+    font-weight: 700;
+  }
+
+  .columns-container {
+    display: flex;
+    overflow-x: auto;
+    flex: 1;
+    padding-top: $spacing-lg;
+  }
+}

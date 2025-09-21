@@ -1,0 +1,24 @@
+@use "../../styles/variables" as *;
+
+.navbar {
+  background-color: $secondary;
+  padding-inline: $spacing-lg;
+
+  &__title {
+    font-weight: 800;
+    font-size: $font-size-4xl;
+    padding-block: $spacing-md;
+    color: $off-white;
+  }
+
+  &__menu {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+  }
+
+  &__item {
+    font-weight: 600;
+    color: hsl(254, 12%, 78%)
+  }
+}

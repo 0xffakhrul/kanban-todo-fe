@@ -1,0 +1,6 @@
+@use "../../styles/variables" as *;
+
+.column {
+  padding-inline: $spacing-md;
+  min-width: 250px;
+}

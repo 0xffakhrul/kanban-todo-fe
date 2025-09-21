@@ -1,0 +1,23 @@
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+@mixin grid($columns: 1, $gap: $spacing-md) {
+    display: grid;
+    grid-template-columns: repeat($columns, 1fr);
+    gap: $gap;
+}
+
+@mixin grid-responsive($breakpoint-sm: 1, $breakpoint-md: 2, $breakpoint-lg: 3, $breakpoint-xl: 4, $gap: $spacing-md) {
+    display: grid;
+    gap: $gap;
+    grid-template-columns: repeat($breakpoint-sm, 1fr);
+}

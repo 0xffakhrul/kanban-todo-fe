@@ -1,27 +1,59 @@
+import { useState } from "react";
 import "./Board.scss";
 import Column from "./Column";
+import { DndContext, type DragEndEvent } from "@dnd-kit/core";
+
+interface Task {
+  id: string;
+  title: string;
+  columnId: string;
+}
 
 export default function Board() {
-  const dummyColumns = [
-    { id: 1, title: "TODO" },
-    { id: 2, title: "IN PROGRESS" },
-    { id: 3, title: "DONE" },
-    { id: 3, title: "DONE" },
-    { id: 3, title: "DONE" },
-    { id: 3, title: "DONE" },
-    { id: 3, title: "DONE" },
-    { id: 3, title: "DONE" },
-  ];
+  const [columns] = useState([
+    { id: "todo", title: "TODO" },
+    { id: "in-progress", title: "IN PROGRESS" },
+    { id: "done", title: "DONE" },
+  ]);
+
+  const [tasks, setTasks] = useState<Task[]>([
+    { id: "1", title: "Task 1", columnId: "todo" },
+    { id: "2", title: "Task 2", columnId: "in-progress" },
+    { id: "3", title: "Task 3", columnId: "done" },
+  ]);
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (!over) return;
+
+    const taskId = active.id as string;
+    const newColumnId = over.id as string;
+
+    setTasks((tasks) =>
+      tasks.map((task) =>
+        task.id === taskId ? { ...task, columnId: newColumnId } : task
+      )
+    );
+  };
+
   return (
     <div className="board">
       <div className="board__title">
         <p className="board__title--text">Welcome to the board</p>
       </div>
+      <DndContext onDragEnd={handleDragEnd}>
       <div className="columns-container">
-        {dummyColumns.map((col) => (
-          <Column key={col.id} title={col.title} />
-        ))}
-      </div>
+          {columns.map((col) => (
+            <Column 
+              key={col.id} 
+              id={col.id}
+              title={col.title} 
+              tasks={tasks.filter(task => task.columnId === col.id)}
+            />
+          ))}
+        </div>
+      </DndContext>
     </div>
   );
 }

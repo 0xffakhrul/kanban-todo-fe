@@ -33,3 +33,21 @@
     }
   }
 }
+
+.btn2 {
+  width: 100%;
+  padding-inline: 0.75rem;
+  font-size: $font-size-sm;
+  border-radius: $radius-sm;
+  border: none;
+  background-color: #1f75cb;
+  min-height: 2rem;
+  color: #fff;
+  font-weight: 600;
+  line-height: 1rem;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #284779;
+  }
+}

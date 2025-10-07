@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import {
   registerSchema,
@@ -42,7 +42,7 @@ export default function RegisterForm() {
         <div style={{ color: "red", marginBottom: "1rem" }}>{serverError}</div>
       )}
 
-      <div>
+      <div className="form-group">
         <label htmlFor="name">Name</label>
         <input type="text" id="name" {...register("name")} />
         {errors.name && (
@@ -54,7 +54,7 @@ export default function RegisterForm() {
         )}
       </div>
 
-      <div>
+      <div className="form-group">
         <label htmlFor="email">Email</label>
         <input type="email" id="email" {...register("email")} />
         {errors.email && (
@@ -66,7 +66,7 @@ export default function RegisterForm() {
         )}
       </div>
 
-      <div>
+      <div className="form-group">
         <label htmlFor="password">Password</label>
         <input type="password" id="password" {...register("password")} />
         {errors.password && (
@@ -79,9 +79,15 @@ export default function RegisterForm() {
       </div>
 
       <div>
-        <button type="submit" disabled={isSubmitting}>
+        <button type="submit" disabled={isSubmitting} className="btn2">
           {isSubmitting ? "Registering..." : "Register"}
         </button>
+      </div>
+
+      <div className="auth-link">
+        <p>
+          Already have an account? <Link to="/login">Login</Link>
+        </p>
       </div>
     </form>
   );

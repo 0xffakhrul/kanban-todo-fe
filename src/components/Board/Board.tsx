@@ -3,6 +3,7 @@ import "./Board.scss";
 import Column from "./Column";
 import { DndContext, type DragEndEvent } from "@dnd-kit/core";
 import Button from "../Button/Button";
+import Navbar from "../Navbar/Navbar";
 
 interface Task {
   id: string;
@@ -41,6 +42,10 @@ export default function Board() {
   };
 
   return (
+  <>
+
+      <Navbar/>
+
     <div className="board">
       <div className="board__top">
         <div className="board__title">
@@ -61,5 +66,6 @@ export default function Board() {
         </div>
       </DndContext>
     </div>
+    </>
   );
 }

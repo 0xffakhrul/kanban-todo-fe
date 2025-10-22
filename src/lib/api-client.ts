@@ -17,7 +17,7 @@ export class ApiError extends Error {
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
   withCredentials: true,
 });
@@ -31,12 +31,14 @@ apiClient.interceptors.response.use(
   (error: AxiosError<any>) => {
     if (error.response) {
       throw new ApiError(
-        error.response.data?.error || 'An error occurred',
+        error.response.data?.message ||
+          error.response.data?.error ||
+          "An error occurred",
         error.response.status,
         error.response.data?.details
       );
     }
-    throw new ApiError('Network error', 0);
+    throw new ApiError("Network error", 0);
   }
 );
 

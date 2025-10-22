@@ -61,7 +61,7 @@ export default function Board() {
         <div className="board__top">
           <div className="board__title">
             <p className="board__title--text">
-              Welcome {user?.name || "to the board"}
+              Welcome {user?.name || "to the board"} trigger
             </p>
           </div>
           <Button

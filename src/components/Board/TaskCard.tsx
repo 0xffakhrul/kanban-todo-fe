@@ -1,14 +1,9 @@
 import "./TaskCard.scss";
 import { useDraggable } from "@dnd-kit/core";
-
-interface Task {
-  id: string;
-  title: string;
-  columnId: string;
-}
+import type { TodoWithStatus } from "../../types/todo.types";
 
 interface TaskCardProps {
-  task: Task;
+  task: TodoWithStatus;
 }
 
 export default function TaskCard({ task }: TaskCardProps) {
@@ -32,6 +27,9 @@ export default function TaskCard({ task }: TaskCardProps) {
       {...attributes}
     >
       <p className="card__title">{task.title}</p>
+      {task.description && (
+        <p className="card__description">{task.description}</p>
+      )}
     </div>
   );
 }

@@ -1,11 +1,18 @@
 @use "../../styles/variables" as *;
 
+.board-container {
+  display: flex;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
 .board {
   display: flex;
   flex-direction: column;
   background-color: $primary;
   color: $off-white;
-  height: 100%;
+  flex: 1;
+  overflow: hidden;
   border-left: 1px solid $primary;
 
   .board__top {

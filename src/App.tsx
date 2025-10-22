@@ -1,12 +1,12 @@
-import Board from "./components/Board/Board";
-import Navbar from "./components/Navbar/Navbar";
 import "./App.scss";
 import { Outlet } from "@tanstack/react-router";
+import { Toaster } from "react-hot-toast";
 
 export default function App() {
   return (
     <div className="main-container">
-      <Navbar />
+      <Toaster />
+      {/* <Navbar /> */}
       <div className="content">
         <Outlet />
       </div>

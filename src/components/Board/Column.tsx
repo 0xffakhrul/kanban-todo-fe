@@ -1,17 +1,12 @@
+import type { TodoWithStatus } from "../../types/todo.types";
 import "./Column.scss";
 import TaskCard from "./TaskCard";
 import { useDroppable } from "@dnd-kit/core";
 
-interface Task {
-  id: string;
-  title: string;
-  columnId: string;
-}
-
 interface ColumnProps {
   id: string;
   title: string;
-  tasks: Task[];
+  tasks: TodoWithStatus[];
 }
 
 export default function Column({ id, title, tasks }: ColumnProps) {
@@ -22,7 +17,7 @@ export default function Column({ id, title, tasks }: ColumnProps) {
   return (
     <div className="column" ref={setNodeRef}>
       <p className="column__title">
-        {title}({tasks.length})
+        {title} ({tasks.length})
       </p>
       <div className="column__cards">
         {tasks.map((task) => (

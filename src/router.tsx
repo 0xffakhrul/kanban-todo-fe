@@ -1,18 +1,37 @@
-import { createRootRoute, createRoute, Router } from "@tanstack/react-router";
+import {
+  createRootRoute,
+  createRoute,
+  Navigate,
+  Router,
+} from "@tanstack/react-router";
 import App from "./App";
-import Home from "./components/Home";
 import Register from "./components/Auth/Register";
 import Login from "./components/Auth/Login";
 import Board from "./components/Board/Board";
+import { useAuth } from "./hooks/useAuth";
 
 const rootRoute = createRootRoute({
   component: App,
 });
 
-const homeRoute = createRoute({
+const IndexRedirect = () => {
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isAuthenticated) {
+    return <Navigate to="/board" />;
+  }
+
+  return <Navigate to="/login" />;
+};
+
+const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
-  component: Home,
+  component: IndexRedirect,
 });
 
 const registerRoute = createRoute({
@@ -30,9 +49,14 @@ const loginRoute = createRoute({
 const boardRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/board",
-  component: Board
-})
+  component: Board,
+});
 
-const routeTree = rootRoute.addChildren([homeRoute, registerRoute, loginRoute, boardRoute]);
+const routeTree = rootRoute.addChildren([
+  indexRoute,
+  registerRoute,
+  loginRoute,
+  boardRoute,
+]);
 
 export const router = new Router({ routeTree });

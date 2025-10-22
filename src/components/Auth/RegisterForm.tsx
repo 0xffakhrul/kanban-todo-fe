@@ -1,18 +1,19 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { Link } from "@tanstack/react-router";
 import {
   registerSchema,
   type RegisterFormData,
 } from "../../validators/auth.validators";
 import { useForm } from "react-hook-form";
 import type { RegisterInput } from "../../types/auth.types";
-import { authService } from "../../services/auth.service";
 import { ApiError } from "../../lib/api-client";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function RegisterForm() {
-  const navigate = useNavigate();
-  const [serverError, setServerError] = useState<string>("");
+  const {
+    register: registerUser,
+    registerError,
+  } = useAuth();
 
   const {
     register,
@@ -23,23 +24,16 @@ export default function RegisterForm() {
   });
 
   const onSubmit = async (data: RegisterFormData) => {
-    try {
-      setServerError("");
-      await authService.register(data);
-
-      navigate({ to: "/" });
-    } catch (error) {
-      if (error instanceof ApiError) {
-        setServerError(error.message);
-      } else {
-        setServerError("An unexpected error occurred");
-      }
-    }
+    registerUser(data);
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      {serverError && (
-        <div style={{ color: "red", marginBottom: "1rem" }}>{serverError}</div>
+      {registerError && (
+        <div style={{ color: "red", marginBottom: "1rem" }}>
+          {registerError instanceof ApiError
+            ? registerError.message
+            : "Login failed"}
+        </div>
       )}
 
       <div className="form-group">

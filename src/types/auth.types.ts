@@ -19,3 +19,11 @@ export interface LoginInput {
   email: string;
   password: string;
 }
+
+export interface AuthState {
+  user: User | null;
+  setUser: (user: User | null) => void;
+  clearUser: () => void;
+  isAuthenticated: boolean;
+  isInitialized: boolean;
+}

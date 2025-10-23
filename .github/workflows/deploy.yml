@@ -32,6 +32,8 @@ jobs:
           context: .
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/kanban-frontend:latest
+          build-args: |
+            VITE_API_URL=/api/v1
           cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/kanban-frontend:buildcache
           cache-to: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/kanban-frontend:buildcache,mode=max
 

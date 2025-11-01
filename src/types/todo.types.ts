@@ -20,7 +20,13 @@ export interface CreateTodoInput {
   statusId: string;
 }
 
+export interface UpdateTodoInput {
+  title?: string;
+  description?: string | null;
+  statusId?: string;
+}
+
 export interface TodoState {
-    selectedTodoId: string | null;
-    setSelectedTodo: (todoId: string | null) => void;
+  selectedTodoId: string | null;
+  setSelectedTodo: (todoId: string | null) => void;
 }

@@ -8,81 +8,103 @@ import { useForm } from "react-hook-form";
 import type { RegisterInput } from "../../types/auth.types";
 import { ApiError } from "../../lib/api-client";
 import { useAuth } from "../../hooks/useAuth";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 
 export default function RegisterForm() {
-  const {
-    register: registerUser,
-    registerError,
-  } = useAuth();
+  const { register: registerUser, registerError } = useAuth();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<RegisterInput>({
+  const form = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+    },
   });
 
   const onSubmit = async (data: RegisterFormData) => {
     registerUser(data);
   };
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      {registerError && (
-        <div style={{ color: "red", marginBottom: "1rem" }}>
-          {registerError instanceof ApiError
-            ? registerError.message
-            : "Login failed"}
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        {registerError && (
+          <div className="text-destructive text-sm p-3 bg-destructive/10 rounded-md">
+            {registerError instanceof ApiError
+              ? registerError.message
+              : "Registration failed"}
+          </div>
+        )}
+
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input type="text" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input type="email" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input type="password" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <Button
+          type="submit"
+          disabled={form.formState.isSubmitting}
+          className="w-full"
+        >
+          {form.formState.isSubmitting ? "Registering..." : "Register"}
+        </Button>
+
+        <div className="text-center text-sm">
+          <p>
+            Already have an account?{" "}
+            <Link to="/login" className="text-primary hover:underline">
+              Login
+            </Link>
+          </p>
         </div>
-      )}
-
-      <div className="form-group">
-        <label htmlFor="name">Name</label>
-        <input type="text" id="name" {...register("name")} />
-        {errors.name && (
-          <span
-            style={{ color: "red", fontSize: "0.875rem", display: "block" }}
-          >
-            {errors.name.message}
-          </span>
-        )}
-      </div>
-
-      <div className="form-group">
-        <label htmlFor="email">Email</label>
-        <input type="email" id="email" {...register("email")} />
-        {errors.email && (
-          <span
-            style={{ color: "red", fontSize: "0.875rem", display: "block" }}
-          >
-            {errors.email.message}
-          </span>
-        )}
-      </div>
-
-      <div className="form-group">
-        <label htmlFor="password">Password</label>
-        <input type="password" id="password" {...register("password")} />
-        {errors.password && (
-          <span
-            style={{ color: "red", fontSize: "0.875rem", display: "block" }}
-          >
-            {errors.password.message}
-          </span>
-        )}
-      </div>
-
-      <div>
-        <button type="submit" disabled={isSubmitting} className="btn2">
-          {isSubmitting ? "Registering..." : "Register"}
-        </button>
-      </div>
-
-      <div className="auth-link">
-        <p>
-          Already have an account? <Link to="/login">Login</Link>
-        </p>
-      </div>
-    </form>
+      </form>
+    </Form>
   );
 }

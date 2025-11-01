@@ -8,22 +8,49 @@ import {
 } from "../../validators/todo.validators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ApiError } from "../../lib/api-client";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { Button } from "../ui/button";
 
-interface TaskForm {
+interface TaskFormProps {
   onSuccess?: () => void;
   todo?: TodoWithStatus;
+  initialStatusId?: string;
 }
 
-export default function TaskForm({ onSuccess, todo }: TaskForm) {
-  const { createTodo, isCreating, createError } = useTodo();
+export default function TaskForm({
+  onSuccess,
+  todo,
+  initialStatusId,
+}: TaskFormProps) {
+  const {
+    createTodo,
+    isCreating,
+    createError,
+    updateTodo,
+    isUpdating,
+    updateError,
+  } = useTodo();
   const { statuses, isLoading: isLoadingStatuses } = useStatus();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<CreateTodoInput>({
+  const isEditMode = !!todo;
+
+  const form = useForm<CreateTodoInput>({
     resolver: zodResolver(createTodoSchema),
     defaultValues: todo
       ? {
@@ -31,92 +58,118 @@ export default function TaskForm({ onSuccess, todo }: TaskForm) {
           description: todo.description || "",
           statusId: todo.statusId,
         }
-      : undefined,
+      : {
+          title: "",
+          description: "",
+          statusId: initialStatusId || "",
+        },
   });
 
   const onSubmit = async (data: CreateTodoFormData) => {
-    createTodo(data, {
-      onSuccess: () => {
-        reset();
-        onSuccess?.();
-      },
-    });
+    if (isEditMode) {
+      updateTodo(
+        { id: todo.id, data },
+        {
+          onSuccess: () => {
+            onSuccess?.();
+          },
+        }
+      );
+    } else {
+      createTodo(data, {
+        onSuccess: () => {
+          form.reset();
+          onSuccess?.();
+        },
+      });
+    }
   };
 
-  const isSubmitting = isCreating;
+  const error = createError || updateError;
+  const isSubmitting = isCreating || isUpdating;
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      {createError && (
-        <div style={{ color: "red", marginBottom: "1rem" }}>
-          {createError instanceof ApiError
-            ? createError.message
-            : "Failed to save task"}
-        </div>
-      )}
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        {error && (
+          <div className="text-destructive text-sm p-3 bg-destructive/10 rounded-md">
+            {error instanceof ApiError
+              ? error.message
+              : `Failed to ${isEditMode ? "update" : "create"} task`}
+          </div>
+        )}
 
-      <div className="form-group">
-        <label htmlFor="title">Title *</label>
-        <input
-          type="text"
-          id="title"
-          placeholder="Enter task title..."
-          {...register("title")}
+        <FormField
+          control={form.control}
+          name="title"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Title</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter task title..." {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-        {errors.title && (
-          <span
-            style={{ color: "red", fontSize: "0.875rem", display: "block" }}
-          >
-            {errors.title.message}
-          </span>
-        )}
-      </div>
 
-      <div className="form-group">
-        <label htmlFor="description">Description</label>
-        <textarea
-          id="description"
-          rows={4}
-          placeholder="Enter task description..."
-          {...register("description")}
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Enter task description..."
+                  rows={4}
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-        {errors.description && (
-          <span
-            style={{ color: "red", fontSize: "0.875rem", display: "block" }}
-          >
-            {errors.description.message}
-          </span>
-        )}
-      </div>
 
-      <div className="form-group">
-        <label htmlFor="statusId">Status *</label>
-        <select
-          id="statusId"
-          {...register("statusId")}
-          disabled={isLoadingStatuses}
-        >
-          <option value="">Select a status...</option>
-          {statuses.map((status) => (
-            <option key={status.id} value={status.id}>
-              {status.name}
-            </option>
-          ))}
-        </select>
-        {errors.statusId && (
-          <span
-            style={{ color: "red", fontSize: "0.875rem", display: "block" }}
-          >
-            {errors.statusId.message}
-          </span>
-        )}
-      </div>
+        <FormField
+          control={form.control}
+          name="statusId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Status</FormLabel>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+                disabled={isLoadingStatuses}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a status..." />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {statuses.map((status) => (
+                    <SelectItem key={status.id} value={status.id}>
+                      {status.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-      <div>
-        <button type="submit" disabled={isSubmitting} className="btn2">
-          {isSubmitting ? "Creating..." : "Create Task"}
-        </button>
-      </div>
-    </form>
+        <Button type="submit" disabled={isSubmitting} className="w-full">
+          {isSubmitting
+            ? isEditMode
+              ? "Updating..."
+              : "Creating..."
+            : isEditMode
+            ? "Update Task"
+            : "Create Task"}
+        </Button>
+      </form>
+    </Form>
   );
 }

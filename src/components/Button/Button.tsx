@@ -1,5 +1,3 @@
-import "./Button.scss";
-
 type ButtonVariant = "primary" | "secondary" | "danger" | "warning";
 
 interface Button {

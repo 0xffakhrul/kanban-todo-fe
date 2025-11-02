@@ -2,28 +2,13 @@ import { useEffect, useState } from "react";
 import Column from "./Column";
 import { DndContext, type DragEndEvent } from "@dnd-kit/core";
 import { Button } from "../ui/button";
-import Navbar from "../Navbar/Navbar";
 import { useNavigate } from "@tanstack/react-router";
 import { useAuth } from "../../hooks/useAuth";
 import { useStatus } from "../../hooks/useStatus";
 import { useTodo } from "../../hooks/useTodo";
-import { Check, Plus, X } from "lucide-react";
-import Modal from "../Modal/Modal";
-import TaskForm from "./TaskForm";
+import { Check, X } from "lucide-react";
 import { ModeToggle } from "../mode-toggle";
-import { AppSidebar } from "../Navbar/app-sidebar";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
 import TaskDialog from "../Modal/TaskModal";
-import Nav from "./Navv";
 import type { TodoWithStatus } from "@/types/todo.types";
 import { Input } from "../ui/input";
 
@@ -152,7 +137,7 @@ export default function Board() {
                       if (e.key === "Enter") handleCreateStatus();
                       if (e.key === "Escape") handleCancelCreate();
                     }}
-                    placeholder="Status name . . ."
+                    placeholder="Column name . . ."
                     className="transparent-input"
                     autoFocus
                   />
